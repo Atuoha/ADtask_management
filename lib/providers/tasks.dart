@@ -4,11 +4,15 @@ import 'package:task_management/model/task.dart';
 import '../constants/colors.dart';
 
 class TaskData extends ChangeNotifier {
+  Task findById(int id) {
+    return _tasks.firstWhere((tasks) => tasks.id == id);
+  }
+
   List tasks() {
     return [..._tasks];
   }
 
-  final List _tasks =  [
+  final List _tasks = [
     Task(
       id: 1,
       icon: Icons.person,
@@ -19,8 +23,7 @@ class TaskData extends ChangeNotifier {
       done: 1,
       title: 'Personal',
     ),
-
-     Task(
+    Task(
       id: 2,
       icon: Icons.work,
       iconColor: kRedDark,
@@ -30,7 +33,6 @@ class TaskData extends ChangeNotifier {
       done: 8,
       title: 'Work',
     ),
-
     Task(
       id: 3,
       icon: Icons.favorite,

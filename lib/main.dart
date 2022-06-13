@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management/providers/tasks.dart';
+import 'package:task_management/screens/category_tasks.dart';
 import 'widgets/bottom_nav.dart';
 
 void main() => runApp(const MyApp());
@@ -12,11 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => TaskData(),
-      child: const MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner: false,
         // theme: ThemeData(fontFamily: 'Joan'),
-        home: BottomNav(),
-        routes: {},
+        home: const BottomNav(),
+        routes: {
+          CategoryTasks.routeName:(context) => const CategoryTasks(),
+        },
       ),
     );
   }
