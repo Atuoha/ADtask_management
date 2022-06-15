@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/go_premium.dart';
 import 'gridview.dart';
 
@@ -15,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         const GoPremium(),
         const SizedBox(height: 10),
         const Text(
-          'Tasks',
+          'Task Categories',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,

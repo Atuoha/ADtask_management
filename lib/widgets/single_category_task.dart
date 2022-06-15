@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/task_category.dart';
+import '../screens/add_new_task_category.dart';
 
 class SingleCategoryTask extends StatelessWidget {
   final String id;
@@ -26,7 +29,11 @@ class SingleCategoryTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget customContainer(Color color, String title) {
+    Widget customContainer(
+      Color color,
+      String title,
+      Color textColor,
+    ) {
       return Container(
         height: 40,
         width: 65,
@@ -38,7 +45,7 @@ class SingleCategoryTask extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-              color: iconColor,
+              color: textColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -56,10 +63,62 @@ class SingleCategoryTask extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 35,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  icon,
+                  color: iconColor,
+                  size: 35,
+                ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        AddNewTaskCategory.routeName,
+                        arguments: {
+                          'id': id,
+                        },
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: btnColor,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: () => Provider.of<TaskCategoryData>(
+                        context,
+                        listen: false,
+                      ).deleteTaskCategory(id),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: btnColor,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.delete_forever,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
             const SizedBox(height: 20),
             Text(
@@ -75,11 +134,13 @@ class SingleCategoryTask extends StatelessWidget {
                 customContainer(
                   btnColor,
                   '$left left',
+                  Colors.white,
                 ),
                 const SizedBox(width: 5),
                 customContainer(
                   Colors.white,
                   '$done done',
+                  iconColor,
                 )
               ],
             )

@@ -22,8 +22,9 @@ class TaskCategoryGrid extends StatelessWidget {
           .map(
             (task) => task.isLast
                 ? GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed(AddNewTaskCategory.routeName),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      AddNewTaskCategory.routeName,
+                    ),
                     child: const EmptyAddTask(),
                   )
                 : GestureDetector(

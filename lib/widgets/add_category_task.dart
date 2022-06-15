@@ -9,7 +9,7 @@ class EmptyAddTask extends StatelessWidget {
     return DottedBorder(
       color: const Color.fromARGB(255, 194, 190, 190),
       dashPattern: const [8, 4],
-  strokeWidth: 2,
+      strokeWidth: 2,
       borderType: BorderType.RRect,
       radius: const Radius.circular(20),
       padding: const EdgeInsets.all(6),
@@ -29,7 +29,7 @@ class EmptyAddTask extends StatelessWidget {
                 ' Add',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20
+                  fontSize: 20,
                 ),
               ),
             ],

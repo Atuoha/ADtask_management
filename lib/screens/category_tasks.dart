@@ -3,7 +3,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 // import 'package:timelines/timelines.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/task_category.dart';
 
 class CategoryTasks extends StatefulWidget {

@@ -61,9 +61,13 @@ class _BottomNavState extends State<BottomNav> {
                 ),
                 primary: Colors.black,
               ),
-              onPressed: () => Navigator.of(context).pushNamed(
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(
                 AddNewTaskCategory.routeName,
-              ),
+              )
+                  .then((value) {
+                Navigator.of(context).pop();
+              },),
               child: const Text(
                 'Create a new task category',
                 style: TextStyle(
@@ -78,9 +82,13 @@ class _BottomNavState extends State<BottomNav> {
                 ),
                 primary: Colors.black,
               ),
-              onPressed: () => Navigator.of(context).pushNamed(
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(
                 AddNewTask.routeName,
-              ),
+              )
+                  .then((value) {
+                Navigator.of(context).pop();
+              }),
               child: const Text(
                 'Create a new task',
                 style: TextStyle(
@@ -99,89 +107,90 @@ class _BottomNavState extends State<BottomNav> {
       ),
     );
     return Scaffold(
-        bottomNavigationBar: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(30),
-            topLeft: Radius.circular(30),
-          ),
-          child: BottomNavigationBar(
-            currentIndex: pageIndex,
-            onTap: selectPage,
-            elevation: 2,
-            backgroundColor: Colors.white,
-            type: BottomNavigationBarType.shifting,
-            showSelectedLabels: false,
-            selectedItemColor: kBlueDarker,
-            unselectedItemColor: kGrey,
-            items: const [
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.home),
-              ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Text(''),
-              ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.person),
-              ),
-            ],
-          ),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(30),
+          topLeft: Radius.circular(30),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.black,
-          ),
-          child: FloatingActionButton(
-            backgroundColor: Colors.transparent,
-            elevation: 2,
-            onPressed: () => showDialogOptions(),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 30,
+        child: BottomNavigationBar(
+          currentIndex: pageIndex,
+          onTap: selectPage,
+          elevation: 2,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.shifting,
+          showSelectedLabels: false,
+          selectedItemColor: kBlueDarker,
+          unselectedItemColor: kGrey,
+          items: const [
+            BottomNavigationBarItem(
+              label: '',
+              icon: Icon(Icons.home),
             ),
-          ),
-        ),
-        backgroundColor: kBackground,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/avatar.png'),
-                ),
-              ),
+            BottomNavigationBarItem(
+              label: '',
+              icon: Text(''),
             ),
-          ),
-          title: const Text(
-            'Hi, Dr Ernest!',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: 28,
+            BottomNavigationBarItem(
+              label: '',
+              icon: Icon(Icons.person),
             ),
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Entypo.dots_two_vertical,
-                color: Colors.black,
-              ),
-            )
           ],
         ),
-        body: Padding(
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.black,
+        ),
+        child: FloatingActionButton(
+          backgroundColor: Colors.transparent,
+          elevation: 2,
+          onPressed: () => showDialogOptions(),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+      ),
+      backgroundColor: kBackground,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _pages[pageIndex == 1 ? 2 : pageIndex],
-        ));
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/avatar.png'),
+              ),
+            ),
+          ),
+        ),
+        title: const Text(
+          'Hi, Dr Ernest!',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 28,
+          ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              Entypo.dots_two_vertical,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _pages[pageIndex == 1 ? 2 : pageIndex],
+      ),
+    );
   }
 }

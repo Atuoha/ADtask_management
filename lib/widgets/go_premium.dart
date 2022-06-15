@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../constants/colors.dart';
 
 class GoPremium extends StatelessWidget {
@@ -71,7 +70,9 @@ class GoPremium extends StatelessWidget {
                 Text(
                   'Get unlimited access \n to all our features!',
                   style: TextStyle(
-                      color: Color.fromARGB(116, 255, 255, 255), fontSize: 18),
+                    color: Color.fromARGB(116, 255, 255, 255),
+                    fontSize: 18,
+                  ),
                 )
               ],
             ),

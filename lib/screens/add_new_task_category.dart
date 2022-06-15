@@ -27,9 +27,6 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
     btnColor: kRedLight,
     title: '',
   );
-  var _initialValue = {
-    'category_title': 'Title',
-  };
 
   var _isInit = true;
 
@@ -41,16 +38,14 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      var categoryId = ModalRoute.of(context)!.settings.arguments as String;
+      var categoryId =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       // ignore: unnecessary_null_comparison
       if (categoryId != null) {
         _editTaskCategory = Provider.of<TaskCategoryData>(
           context,
           listen: false,
-        ).findById(categoryId);
-        _initialValue = {
-          'category_title': _editTaskCategory.title.toString(),
-        };
+        ).findById(categoryId['id']);
       }
     }
     _isInit = false;
@@ -71,6 +66,10 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
       ).addTaskCategory(_editTaskCategory);
     } else {
       //update
+      Provider.of<TaskCategoryData>(
+        context,
+        listen: false,
+      ).updateTaskCategory(_editTaskCategory);
     }
     Navigator.of(context).pop();
   }
@@ -204,9 +203,11 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
             );
           },
         ),
-        title: const Text(
-          'Add New Task Category',
-          style: TextStyle(
+        title: Text(
+          _editTaskCategory.id == ''
+              ? 'Add New Task Category'
+              : '${_editTaskCategory.title} Category',
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontSize: 30,
@@ -225,11 +226,13 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
             child: Text(
-              'Add a new task category',
-              style: TextStyle(
+              _editTaskCategory.id == ''
+                  ? 'Add New Task Category'
+                  : 'Editing ${_editTaskCategory.title} Task Category',
+              style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(116, 255, 255, 255),
               ),
@@ -258,7 +261,10 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                     child: Column(
                       children: [
                         TextFormField(
-                          initialValue: _initialValue['title'],
+                          initialValue: _editTaskCategory.id!.isEmpty
+                              ? ''
+                              : _editTaskCategory.title,
+                          textCapitalization: TextCapitalization.sentences,
                           onSaved: (value) {
                             _editTaskCategory = TaskCategory(
                               id: _editTaskCategory.id,
@@ -282,28 +288,30 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
                         IconPicker(
-                          initialValue: 'favorite',
-                          icon: const Icon(Icons.apps),
-                          // labelText: "Icon",
+                          initialValue: _editTaskCategory.id!.isEmpty
+                              ? 'favorite'
+                              : 'IconCode: ${_editTaskCategory.icon}',
+                          icon: Icon(
+                            _editTaskCategory.id!.isEmpty
+                                ? Icons.apps
+                                : _editTaskCategory.icon,
+                          ),
                           title: "Select an icon",
                           cancelBtn: "Cancel",
                           enableSearch: true,
                           searchHint: 'Search icon',
                           iconCollection: myIconCollection,
                           textInputAction: TextInputAction.next,
-
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'An icon is required';
                             }
                             return null;
                           },
-
                           onSaved: (val) {
                             var iconDataJson = jsonDecode(val.toString());
-                            // var iconName = iconDataJson['codePoint'];
                             IconData icon = IconData(
                               iconDataJson['codePoint'],
                               fontFamily: iconDataJson['fontFamily'],
@@ -318,12 +326,12 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                             );
                           },
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
                         ColorPickerFormField(
                           initialValue: [],
                           defaultColor: Colors.blue,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          maxColors: 1,
+                          maxColors: 10,
                           decoration: const InputDecoration(
                             icon: Icon(Icons.color_lens),
                             hintText: 'Color Picker',
@@ -338,12 +346,34 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                             _editTaskCategory = TaskCategory(
                               id: _editTaskCategory.id,
                               icon: _editTaskCategory.icon,
-                              iconColor: value![0],
-                              bgColor: value[0].withOpacity(0.6),
-                              btnColor: value[0].withOpacity(0.2),
+                              iconColor: value!.last,
+                              bgColor: value.last.withOpacity(0.6),
+                              btnColor: value.last.withOpacity(0.2),
                               title: _editTaskCategory.title,
                             );
                           },
+                        ),
+                        Row(
+                          children: [
+                            if (_editTaskCategory.id!.isNotEmpty) ...[
+                              const SizedBox(width: 10),
+                              const Text(
+                                'Selected Color',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: _editTaskCategory.iconColor,
+                                ),
+                              ),
+                            ]
+                          ],
                         ),
                         ElevatedButton(
                           onPressed: () => _saveData(),
@@ -353,8 +383,10 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: const Text(
-                            'Submit New Task Category',
+                          child: Text(
+                            _editTaskCategory.id!.isEmpty
+                                ? 'Submit New Task Category'
+                                : 'Submit Edited Information',
                           ),
                         )
                       ],
