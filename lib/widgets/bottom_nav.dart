@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../screens/add_new_task.dart';
+import '../screens/add_new_task_category.dart';
 import '../screens/home.dart';
 import '../screens/profile.dart';
 import 'package:flutter/services.dart';
@@ -27,100 +29,159 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
+    Future showDialogOptions() {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Center(
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: const [
+                Icon(
+                  Icons.color_lens,
+                  size: 45,
+                  color: kBlueDarker,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  'Select Action',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kBlueDarker,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                primary: Colors.black,
+              ),
+              onPressed: () => Navigator.of(context).pushNamed(
+                AddNewTaskCategory.routeName,
+              ),
+              child: const Text(
+                'Create a new task category',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                primary: Colors.black,
+              ),
+              onPressed: () => Navigator.of(context).pushNamed(
+                AddNewTask.routeName,
+              ),
+              child: const Text(
+                'Create a new task',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
     );
     return Scaffold(
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(30),
-          topLeft: Radius.circular(30),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: pageIndex,
-          onTap: selectPage,
-          elevation: 2,
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.shifting,
-          showSelectedLabels: false,
-          selectedItemColor: kBlueDarker,
-          unselectedItemColor: kGrey,
-          items: const [
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: Text(''),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(Icons.person),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.black,
-        ),
-        child: const FloatingActionButton(
-          backgroundColor: Colors.transparent,
-          elevation: 2,
-          onPressed: null,
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 30,
+        bottomNavigationBar: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: pageIndex,
+            onTap: selectPage,
+            elevation: 2,
+            backgroundColor: Colors.white,
+            type: BottomNavigationBarType.shifting,
+            showSelectedLabels: false,
+            selectedItemColor: kBlueDarker,
+            unselectedItemColor: kGrey,
+            items: const [
+              BottomNavigationBarItem(
+                label: '',
+                icon: Icon(Icons.home),
+              ),
+              BottomNavigationBarItem(
+                label: '',
+                icon: Text(''),
+              ),
+              BottomNavigationBarItem(
+                label: '',
+                icon: Icon(Icons.person),
+              ),
+            ],
           ),
         ),
-      ),
-      backgroundColor: kBackground,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/avatar.png'),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black,
+          ),
+          child: FloatingActionButton(
+            backgroundColor: Colors.transparent,
+            elevation: 2,
+            onPressed: () => showDialogOptions(),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+        ),
+        backgroundColor: kBackground,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/avatar.png'),
+                ),
               ),
             ),
           ),
-        ),
-        title: const Text(
-          'Hi, Dr Ernest!',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 28,
-          ),
-        ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Entypo.dots_two_vertical,
+          title: const Text(
+            'Hi, Dr Ernest!',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
               color: Colors.black,
+              fontSize: 28,
             ),
-          )
-        ],
-      ),
-      body: 
-       Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:
-      _pages[pageIndex == 1 ? 2 : pageIndex],
-
-          )
-      
-    );
+          ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Entypo.dots_two_vertical,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _pages[pageIndex == 1 ? 2 : pageIndex],
+        ));
   }
 }

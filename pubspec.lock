@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  color_picker_field:
+    dependency: "direct main"
+    description:
+      name: color_picker_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -88,6 +95,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  icon_picker:
+    dependency: "direct main"
+    description:
+      name: icon_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   lints:
     dependency: transitive
     description:

@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-// import 'package:timelines/timelines.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/task_category.dart';
 
-class CategoryTasks extends StatefulWidget {
-  static const routeName = '/category-tasks';
-  const CategoryTasks({Key? key}) : super(key: key);
+class AddNewTask extends StatefulWidget {
+  static const routeName = '/newtask';
+  const AddNewTask({Key? key}) : super(key: key);
 
   @override
-  State<CategoryTasks> createState() => _CategoryTasksState();
+  State<AddNewTask> createState() => _AddNewTaskState();
 }
 
-class _CategoryTasksState extends State<CategoryTasks> {
+class _AddNewTaskState extends State<AddNewTask> {
   @override
   Widget build(BuildContext context) {
-    var data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    var id = data['id'] as String;
-
-    var taskCategory = Provider.of<TaskCategoryData>(context).findById(id);
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -47,9 +40,9 @@ class _CategoryTasksState extends State<CategoryTasks> {
             );
           },
         ),
-        title: Text(
-          '${taskCategory.title} tasks',
-          style: const TextStyle(
+        title: const Text(
+          'Add New Task',
+          style:  TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontSize: 30,
@@ -68,19 +61,17 @@ class _CategoryTasksState extends State<CategoryTasks> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Center(
-              child: Text(
-                'You have ${taskCategory.left} tasks for today!',
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Color.fromARGB(116, 255, 255, 255),
-                ),
+          const Padding(
+            padding:  EdgeInsets.only(left:20.0),
+            child: Text(
+              'Add a new task',
+              style:  TextStyle(
+                fontSize: 18,
+                color: Color.fromARGB(116, 255, 255, 255),
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Expanded(
             child: ConstrainedBox(
               constraints: const BoxConstraints.tightFor(

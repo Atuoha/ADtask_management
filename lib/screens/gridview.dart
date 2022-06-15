@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management/widgets/single_category_task.dart';
-import '../providers/tasks.dart';
+import '../providers/task_category.dart';
 import '../widgets/add_category_task.dart';
+import 'add_new_task_category.dart';
 import 'category_tasks.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -16,11 +17,15 @@ class TaskCategoryGrid extends StatelessWidget {
       crossAxisCount: 2,
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
-      children: Provider.of<TaskData>(context)
+      children: Provider.of<TaskCategoryData>(context)
           .tasks()
           .map(
             (task) => task.isLast
-                ? const EmptyAddTask()
+                ? GestureDetector(
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(AddNewTaskCategory.routeName),
+                    child: const EmptyAddTask(),
+                  )
                 : GestureDetector(
                     onTap: () => Navigator.of(context).pushNamed(
                       CategoryTasks.routeName,

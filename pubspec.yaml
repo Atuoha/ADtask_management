@@ -38,6 +38,9 @@ dependencies:
   flutter_vector_icons: ^1.0.0
   dotted_border: ^2.0.0+2
   timelines: ^0.1.0
+  icon_picker: ^2.1.0
+  color_picker_field: ^1.1.1
+
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SingleCategoryTask extends StatelessWidget {
-  final int id;
+  final String id;
   final IconData icon;
   final String title;
   final Color iconColor;

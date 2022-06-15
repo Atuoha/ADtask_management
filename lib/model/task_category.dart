@@ -1,25 +1,25 @@
 import 'package:flutter/cupertino.dart';
 
-class Task {
-  int? id;
+class TaskCategory {
+  String? id;
   IconData? icon;
   String? title;
   Color? iconColor;
   Color? bgColor;
   Color? btnColor;
-  num? left;
-  num? done;
+  num left;
+  num done;
   bool isLast;
 
-  Task({
+  TaskCategory({
     this.id,
     this.icon,
     this.title,
     this.iconColor,
     this.bgColor,
     this.btnColor,
-    this.left,
-    this.done,
+    this.left = 0,
+    this.done = 0,
     this.isLast = false,
   });
 }
