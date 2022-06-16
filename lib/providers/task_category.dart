@@ -6,8 +6,29 @@ class TaskCategoryData extends ChangeNotifier {
     return _taskCategories.firstWhere((tasks) => tasks.id == id);
   }
 
-  List tasks() {
+  List taskCategories() {
     return [..._taskCategories];
+  }
+
+  void addTask(String taskId, String taskCategoryId) {
+    var taskCategory =
+        _taskCategories.firstWhere((category) => category.id == taskCategoryId);
+    taskCategory.tasks.add(taskId);
+    taskCategory.left = taskCategory.left + 1;
+    notifyListeners();
+  }
+
+  void removeTask(String taskId, String taskCategoryId) {
+    var taskCategory =
+        _taskCategories.firstWhere((category) => category.id == taskCategoryId);
+    taskCategory.tasks.remove(taskId);
+    notifyListeners();
+  }
+
+  String returnTitle(String id) {
+    var taskCategory =
+        _taskCategories.firstWhere((tasksCat) => tasksCat.id == id);
+    return taskCategory.title;
   }
 
   void addTaskCategory(TaskCategory taskcategory) {
@@ -39,36 +60,6 @@ class TaskCategoryData extends ChangeNotifier {
   }
 
   final List _taskCategories = [
-    // TaskCategory(
-    //   id: '1',
-    //   icon: Icons.person,
-    //   iconColor: kYellowDark,
-    //   bgColor: kYellow,
-    //   btnColor: kYellowLight,
-    //   left: 3,
-    //   done: 1,
-    //   title: 'Personal',
-    // ),
-    // TaskCategory(
-    //   id: '2',
-    //   icon: Icons.work,
-    //   iconColor: kRedDark,
-    //   bgColor: kRed,
-    //   btnColor: kRedLight,
-    //   left: 2,
-    //   done: 8,
-    //   title: 'Work',
-    // ),
-    // TaskCategory(
-    //   id: '3',
-    //   icon: Icons.favorite,
-    //   iconColor: kBlueDark,
-    //   bgColor: kBlue,
-    //   btnColor: kBlueLight,
-    //   left: 1,
-    //   done: 1,
-    //   title: 'Health',
-    // ),
-    TaskCategory(isLast: true)
+    TaskCategory(isLast: true),
   ];
 }

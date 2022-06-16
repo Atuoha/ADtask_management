@@ -102,6 +102,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.0"
   lints:
     dependency: transitive
     description:
@@ -212,6 +219,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  textfield_datepicker:
+    dependency: "direct main"
+    description:
+      name: textfield_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   timelines:
     dependency: "direct main"
     description:

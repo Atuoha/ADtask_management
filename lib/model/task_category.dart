@@ -10,6 +10,7 @@ class TaskCategory {
   num left;
   num done;
   bool isLast;
+  List<int> tasks;
 
   TaskCategory({
     this.id,
@@ -21,5 +22,6 @@ class TaskCategory {
     this.left = 0,
     this.done = 0,
     this.isLast = false,
+    this.tasks = const [],
   });
 }

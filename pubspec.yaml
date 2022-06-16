@@ -40,6 +40,8 @@ dependencies:
   timelines: ^0.1.0
   icon_picker: ^2.1.0
   color_picker_field: ^1.1.1
+  intl: ^0.17.0
+  textfield_datepicker: ^0.1.0
 
 
 dev_dependencies:

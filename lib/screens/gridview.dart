@@ -18,7 +18,7 @@ class TaskCategoryGrid extends StatelessWidget {
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       children: Provider.of<TaskCategoryData>(context)
-          .tasks()
+          .taskCategories()
           .map(
             (task) => task.isLast
                 ? GestureDetector(
