@@ -5,8 +5,8 @@ class Task {
   final String taskCategoryId;
   final String title;
   final String description;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
+  final String startTime;
+  final String endTime;
   final DateTime date;
   final Color bgColor;
   final bool accomplishedStatus;

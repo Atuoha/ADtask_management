@@ -31,8 +31,8 @@ class _AddNewTaskState extends State<AddNewTask> {
     title: '',
     description: '',
     bgColor: Colors.red,
-    startTime: TimeOfDay.now(),
-    endTime: TimeOfDay.now(),
+    startTime: '',
+    endTime: '',
     date: DateTime.now(),
     taskCategoryId: '',
   );
@@ -94,6 +94,7 @@ class _AddNewTaskState extends State<AddNewTask> {
         listen: false,
       ).updateTask(_taskData);
     }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -184,8 +185,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                       child: Column(
                         children: [
                           TextFormField(
-                            initialValue:
-                                createState ? '' : _taskData.title,
+                            initialValue: createState ? '' : _taskData.title,
                             textCapitalization: TextCapitalization.sentences,
                             onSaved: (value) {
                               _taskData = Task(
@@ -214,9 +214,8 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
-                            initialValue: createState
-                                ? ''
-                                : _taskData.description,
+                            initialValue:
+                                createState ? '' : _taskData.description,
                             textCapitalization: TextCapitalization.sentences,
                             maxLines: 5,
                             minLines: 3,
@@ -251,18 +250,25 @@ class _AddNewTaskState extends State<AddNewTask> {
                             defaultColor: Colors.blue,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            maxColors: 5,
+                            maxColors: 10,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.color_lens),
                               hintText: 'Color Picker',
                             ),
-                            validator: (List<Color>? value) {
-                              if (value!.isEmpty) {
-                                return 'a color is required';
-                              }
-                              return null;
-                            },
+                            validator: createState
+                                ? (List<Color>? value) {
+                                    if (value!.isEmpty) {
+                                      return 'a color is required';
+                                    }
+                                    return null;
+                                  }
+                                : null,
                             onSaved: (value) {
+                              if (!createState) {
+                                value!.isEmpty
+                                    ? value = [_taskData.bgColor]
+                                    : value;
+                              }
                               _taskData = Task(
                                 id: _taskData.id,
                                 title: _taskData.title,
@@ -274,6 +280,30 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 bgColor: value!.last.withOpacity(0.6),
                               );
                             },
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              if (!createState) ...[
+                                const SizedBox(width: 10),
+                                const Text(
+                                  'Prior Selected Color',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: _taskData.bgColor,
+                                  ),
+                                ),
+                              ]
+                            ],
                           ),
                           const SizedBox(height: 10),
                           TextfieldTimePicker(
@@ -288,26 +318,31 @@ class _AddNewTaskState extends State<AddNewTask> {
                             ),
                             materialInitialTime: TimeOfDay.now(),
                             onSaved: (value) {
-                              var startTime = TimeOfDay(
-                                  hour: int.parse(value!.split(":")[0]),
-                                  minute: int.parse(value.split(":")[1]));
+                              // ignore: prefer_typing_uninitialized_variables
+                              if (!createState) {
+                                value!.isEmpty
+                                    ? value = _taskData.startTime
+                                    : value;
+                              }
                               _taskData = Task(
                                 id: _taskData.id,
                                 title: _taskData.title,
                                 description: _taskData.description,
                                 bgColor: _taskData.bgColor,
                                 taskCategoryId: _taskData.taskCategoryId,
-                                startTime: startTime,
+                                startTime: value!,
                                 endTime: _taskData.endTime,
                                 date: _taskData.date,
                               );
                             },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Start time is required';
-                              }
-                              return null;
-                            },
+                            validator: createState
+                                ? (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Start time is required';
+                                    }
+                                    return null;
+                                  }
+                                : null,
                           ),
                           const SizedBox(height: 10),
                           TextfieldTimePicker(
@@ -322,9 +357,12 @@ class _AddNewTaskState extends State<AddNewTask> {
                             ),
                             materialInitialTime: TimeOfDay.now(),
                             onSaved: (value) {
-                              var endTime = TimeOfDay(
-                                  hour: int.parse(value!.split(":")[0]),
-                                  minute: int.parse(value.split(":")[1]));
+                              // ignore: prefer_typing_uninitialized_variables
+                              if (!createState) {
+                                value!.isEmpty
+                                    ? value = _taskData.endTime
+                                    : value;
+                              }
                               _taskData = Task(
                                 id: _taskData.id,
                                 title: _taskData.title,
@@ -332,16 +370,18 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 bgColor: _taskData.bgColor,
                                 taskCategoryId: _taskData.taskCategoryId,
                                 startTime: _taskData.startTime,
-                                endTime: endTime,
+                                endTime: value!,
                                 date: _taskData.date,
                               );
                             },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'End time is required';
-                              }
-                              return null;
-                            },
+                            validator: createState
+                                ? (value) {
+                                    if (value!.isEmpty) {
+                                      return 'End time is required';
+                                    }
+                                    return null;
+                                  }
+                                : null,
                           ),
                           const SizedBox(height: 10),
                           TextfieldDatePicker(
@@ -362,8 +402,19 @@ class _AddNewTaskState extends State<AddNewTask> {
                               hintText: 'Select Date',
                             ),
                             onSaved: (value) {
-                              var date =
-                                  DateFormat('dd-MMMM-yyyy').parse(value!);
+                              // ignore: prefer_typing_uninitialized_variables
+                              var date;
+                              if (!createState) {
+                                if (value!.isEmpty) {
+                                  date = _taskData.date;
+                                } else {
+                                  date =
+                                      DateFormat('dd-MMMM-yyyy').parse(value);
+                                }
+                              } else {
+                                date = DateFormat('dd-MMMM-yyyy').parse(value!);
+                              }
+
                               _taskData = Task(
                                 id: _taskData.id,
                                 title: _taskData.title,
@@ -384,6 +435,8 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
+                            value:
+                                !createState ? _taskData.taskCategoryId : null,
                             items: taskCategories
                                 .map(
                                   (category) => DropdownMenuItem(
@@ -423,12 +476,14 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 date: _taskData.date,
                               );
                             },
-                            validator: (value) {
-                              if (value == '') {
-                                return 'Task category must be selected';
-                              }
-                              return null;
-                            },
+                            validator: createState
+                                ? (value) {
+                                    if (value == '') {
+                                      return 'Task category must be selected';
+                                    }
+                                    return null;
+                                  }
+                                : null,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.wysiwyg),
                               hintText: 'Select Task Category',
@@ -462,3 +517,9 @@ class _AddNewTaskState extends State<AddNewTask> {
     );
   }
 }
+
+
+  // startTime = TimeOfDay(
+  //       hour: int.parse(value.split(":")[0]),
+  //       minute: int.parse(value.split(":")[1]),
+  //     );

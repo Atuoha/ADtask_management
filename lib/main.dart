@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'providers/task.dart';
 import 'providers/task_category.dart';
 import 'screens/add_new_task_category.dart';
 import 'screens/add_new_task.dart';
@@ -14,8 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TaskCategoryData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => TaskCategoryData(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TaskData(),
+        )
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // theme: ThemeData(fontFamily: 'Joan'),

@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import '../model/task.dart';
 
 class TaskData extends ChangeNotifier {
-
   void toggleAccomplishmentStatus(String id) {
-    var task = _tasks.firstWhere((task) => task.id == id);
+    var task = _tasks.firstWhere(
+      (task) => task.id == id,
+    );
     task.accomplishmentStatus = !task.accomplishmentStatus;
     notifyListeners();
   }
 
   bool checkAccomplishmentStatus(String id) {
-    var task = _tasks.firstWhere((task) => task.id == id);
+    var task = _tasks.firstWhere(
+      (task) => task.id == id,
+    );
     return task.accomplishedStatus;
   }
 

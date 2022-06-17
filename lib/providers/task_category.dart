@@ -3,7 +3,9 @@ import 'package:task_management/model/task_category.dart';
 
 class TaskCategoryData extends ChangeNotifier {
   TaskCategory findById(String id) {
-    return _taskCategories.firstWhere((tasks) => tasks.id == id);
+    return _taskCategories.firstWhere(
+      (tasks) => tasks.id == id,
+    );
   }
 
   List taskCategories() {
@@ -11,23 +13,26 @@ class TaskCategoryData extends ChangeNotifier {
   }
 
   void addTask(String taskId, String taskCategoryId) {
-    var taskCategory =
-        _taskCategories.firstWhere((category) => category.id == taskCategoryId);
-    taskCategory.tasks.add(taskId);
+    var taskCategory = _taskCategories.firstWhere(
+      (category) => category.id == taskCategoryId,
+    );
+    // taskCategory.tasks.insert(0, taskId);
     taskCategory.left = taskCategory.left + 1;
     notifyListeners();
   }
 
   void removeTask(String taskId, String taskCategoryId) {
-    var taskCategory =
-        _taskCategories.firstWhere((category) => category.id == taskCategoryId);
+    var taskCategory = _taskCategories.firstWhere(
+      (category) => category.id == taskCategoryId,
+    );
     taskCategory.tasks.remove(taskId);
     notifyListeners();
   }
 
   String returnTitle(String id) {
-    var taskCategory =
-        _taskCategories.firstWhere((tasksCat) => tasksCat.id == id);
+    var taskCategory = _taskCategories.firstWhere(
+      (tasksCat) => tasksCat.id == id,
+    );
     return taskCategory.title;
   }
 
@@ -46,8 +51,9 @@ class TaskCategoryData extends ChangeNotifier {
   }
 
   void updateTaskCategory(TaskCategory updatedCategoryDetails) {
-    var taskIndex = _taskCategories
-        .indexWhere((category) => category.id == updatedCategoryDetails.id);
+    var taskIndex = _taskCategories.indexWhere(
+      (category) => category.id == updatedCategoryDetails.id,
+    );
     if (taskIndex >= 0) {
       _taskCategories[taskIndex] = updatedCategoryDetails;
     }
@@ -55,7 +61,9 @@ class TaskCategoryData extends ChangeNotifier {
   }
 
   void deleteTaskCategory(String id) {
-    _taskCategories.removeWhere((category) => category.id == id);
+    _taskCategories.removeWhere(
+      (category) => category.id == id,
+    );
     notifyListeners();
   }
 
