@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:color_picker_field/color_picker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -40,6 +38,7 @@ class _AddNewTaskState extends State<AddNewTask> {
   );
 
   var isInit = true;
+  var createState = true;
 
   @override
   void initState() {
@@ -57,6 +56,10 @@ class _AddNewTaskState extends State<AddNewTask> {
           context,
           listen: false,
         ).findById(taskId['id']);
+
+        setState(() {
+          createState = !createState;
+        });
       }
     }
     super.didChangeDependencies();
@@ -69,7 +72,7 @@ class _AddNewTaskState extends State<AddNewTask> {
       return;
     }
     form.currentState!.save();
-    if (_taskData.id.isEmpty) {
+    if (createState) {
       // Adding
       Provider.of<TaskData>(
         context,
@@ -86,7 +89,10 @@ class _AddNewTaskState extends State<AddNewTask> {
       );
     } else {
       // Updating
-      Provider.of<TaskData>(context, listen: false).updateTask(_taskData);
+      Provider.of<TaskData>(
+        context,
+        listen: false,
+      ).updateTask(_taskData);
     }
   }
 
@@ -122,7 +128,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           },
         ),
         title: Text(
-          _taskData.id == '' ? 'Add New Task ' : '${_taskData.title} Category',
+          createState ? 'Add New Task ' : '${_taskData.title} Category',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -145,7 +151,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
-              _taskData.id == ''
+              createState
                   ? 'Add New Task '
                   : 'Editing ${_taskData.title} Task Category',
               style: const TextStyle(
@@ -179,7 +185,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                         children: [
                           TextFormField(
                             initialValue:
-                                _taskData.id.isEmpty ? '' : _taskData.title,
+                                createState ? '' : _taskData.title,
                             textCapitalization: TextCapitalization.sentences,
                             onSaved: (value) {
                               _taskData = Task(
@@ -208,7 +214,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
-                            initialValue: _taskData.id.isEmpty
+                            initialValue: createState
                                 ? ''
                                 : _taskData.description,
                             textCapitalization: TextCapitalization.sentences,
@@ -421,6 +427,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                               if (value == '') {
                                 return 'Task category must be selected';
                               }
+                              return null;
                             },
                             decoration: const InputDecoration(
                               icon: Icon(Icons.wysiwyg),
@@ -437,7 +444,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                               ),
                             ),
                             child: Text(
-                              _taskData.id.isEmpty
+                              createState
                                   ? 'Submit A New Task'
                                   : 'Submit Edited Information',
                             ),

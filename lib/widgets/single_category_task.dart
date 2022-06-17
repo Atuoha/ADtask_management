@@ -123,6 +123,8 @@ class SingleCategoryTask extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,

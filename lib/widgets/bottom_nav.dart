@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_management/providers/task_category.dart';
 import '../constants/colors.dart';
 import '../screens/add_new_task.dart';
 import '../screens/add_new_task_category.dart';
@@ -65,9 +67,11 @@ class _BottomNavState extends State<BottomNav> {
                   .pushNamed(
                 AddNewTaskCategory.routeName,
               )
-                  .then((value) {
-                Navigator.of(context).pop();
-              },),
+                  .then(
+                (value) {
+                  Navigator.of(context).pop();
+                },
+              ),
               child: const Text(
                 'Create a new task category',
                 style: TextStyle(
@@ -75,27 +79,32 @@ class _BottomNavState extends State<BottomNav> {
                 ),
               ),
             ),
-            ElevatedButton(
+            Provider.of<TaskCategoryData>(
+                context,
+                listen: false,
+              ).taskCategories().length > 1
+                  ?ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 primary: Colors.black,
               ),
-              onPressed: () => Navigator.of(context)
-                  .pushNamed(
-                AddNewTask.routeName,
-              )
-                  .then((value) {
-                Navigator.of(context).pop();
-              }),
+              onPressed: () =>  Navigator.of(context)
+                      .pushNamed(
+                      AddNewTask.routeName,
+                    )
+                      .then((value) {
+                      Navigator.of(context).pop();
+                    },)
+                  ,
               child: const Text(
                 'Create a new task',
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
-            ),
+            ): const Text(''),
           ],
         ),
       );

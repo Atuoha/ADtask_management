@@ -19,7 +19,7 @@ class AddNewTaskCategory extends StatefulWidget {
 
 class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
   var form = GlobalKey<FormState>();
-  var _taskCategoryData = TaskCategory(
+  var taskCategoryData = TaskCategory(
     id: '',
     icon: Icons.work,
     iconColor: kRedDark,
@@ -29,6 +29,7 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
   );
 
   var _isInit = true;
+  var createState = true;
 
   @override
   void initState() {
@@ -42,10 +43,13 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       // ignore: unnecessary_null_comparison
       if (categoryId != null) {
-        _taskCategoryData = Provider.of<TaskCategoryData>(
+        taskCategoryData = Provider.of<TaskCategoryData>(
           context,
           listen: false,
         ).findById(categoryId['id']);
+        setState(() {
+          createState = !createState;
+        });
       }
     }
     _isInit = false;
@@ -54,22 +58,25 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
 
   void _saveData() {
     final isValid = form.currentState!.validate();
-    if (!isValid) {
-      return;
+
+    if (createState) {
+      if (!isValid) {
+        return;
+      }
     }
     form.currentState!.save();
-    if (_taskCategoryData.id == '') {
+    if (createState) {
       // create
       Provider.of<TaskCategoryData>(
         context,
         listen: false,
-      ).addTaskCategory(_taskCategoryData);
+      ).addTaskCategory(taskCategoryData);
     } else {
       //update
       Provider.of<TaskCategoryData>(
         context,
         listen: false,
-      ).updateTaskCategory(_taskCategoryData);
+      ).updateTaskCategory(taskCategoryData);
     }
     Navigator.of(context).pop();
   }
@@ -204,9 +211,9 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
           },
         ),
         title: Text(
-          _taskCategoryData.id == ''
+          createState
               ? 'Add New Task Category'
-              : '${_taskCategoryData.title} Category',
+              : '${taskCategoryData.title} Category',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -229,9 +236,9 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
-              _taskCategoryData.id == ''
+              createState
                   ? 'Add New Task Category'
-                  : 'Editing ${_taskCategoryData.title} Task Category',
+                  : 'Editing ${taskCategoryData.title} Task Category',
               style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(116, 255, 255, 255),
@@ -258,139 +265,161 @@ class _AddNewTaskCategoryState extends State<AddNewTaskCategory> {
                   child: Form(
                     key: form,
                     autovalidateMode: AutovalidateMode.always,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          initialValue: _taskCategoryData.id!.isEmpty
-                              ? ''
-                              : _taskCategoryData.title,
-                          textCapitalization: TextCapitalization.sentences,
-                          onSaved: (value) {
-                            _taskCategoryData = TaskCategory(
-                              id: _taskCategoryData.id,
-                              icon: _taskCategoryData.icon,
-                              iconColor: _taskCategoryData.iconColor,
-                              bgColor: _taskCategoryData.bgColor,
-                              btnColor: _taskCategoryData.btnColor,
-                              title: value,
-                            );
-                          },
-                          textInputAction: TextInputAction.next,
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.title),
-                            hintText: 'Task Category Title',
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'A title is required';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        IconPicker(
-                          initialValue: _taskCategoryData.id!.isEmpty
-                              ? 'favorite'
-                              : 'IconCode: ${_taskCategoryData.icon}',
-                          icon: Icon(
-                            _taskCategoryData.id!.isEmpty
-                                ? Icons.apps
-                                : _taskCategoryData.icon,
-                          ),
-                          title: "Select an icon",
-                          cancelBtn: "Cancel",
-                          enableSearch: true,
-                          searchHint: 'Search icon',
-                          iconCollection: myIconCollection,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'An icon is required';
-                            }
-                            return null;
-                          },
-                          onSaved: (val) {
-                            var iconDataJson = jsonDecode(val.toString());
-                            IconData icon = IconData(
-                              iconDataJson['codePoint'],
-                              fontFamily: iconDataJson['fontFamily'],
-                            );
-                            _taskCategoryData = TaskCategory(
-                              id: _taskCategoryData.id,
-                              icon: icon,
-                              iconColor: _taskCategoryData.iconColor,
-                              bgColor: _taskCategoryData.bgColor,
-                              btnColor: _taskCategoryData.btnColor,
-                              title: _taskCategoryData.title,
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        ColorPickerFormField(
-                          initialValue: [],
-                          defaultColor: Colors.blue,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          maxColors: 10,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.color_lens),
-                            hintText: 'Color Picker',
-                          ),
-                          validator: (List<Color>? value) {
-                            if (value!.isEmpty) {
-                              return 'a color is required';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            _taskCategoryData = TaskCategory(
-                              id: _taskCategoryData.id,
-                              icon: _taskCategoryData.icon,
-                              iconColor: value!.last,
-                              bgColor: value.last.withOpacity(0.6),
-                              btnColor: value.last.withOpacity(0.2),
-                              title: _taskCategoryData.title,
-                            );
-                          },
-                        ),
-                        Row(
-                          children: [
-                            if (_taskCategoryData.id!.isNotEmpty) ...[
-                              const SizedBox(width: 10),
-                              const Text(
-                                'Prior Selected Color',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Container(
-                                margin: const EdgeInsets.only(bottom:10),
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: _taskCategoryData.iconColor,
-                                ),
-                              ),
-                            ]
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _saveData(),
-                          style: ElevatedButton.styleFrom(
-                            primary: kBlueDarker,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            initialValue:
+                                createState ? '' : taskCategoryData.title,
+                            textCapitalization: TextCapitalization.sentences,
+                            onSaved: (value) {
+                              taskCategoryData = TaskCategory(
+                                id: taskCategoryData.id,
+                                icon: taskCategoryData.icon,
+                                iconColor: taskCategoryData.iconColor,
+                                bgColor: taskCategoryData.bgColor,
+                                btnColor: taskCategoryData.btnColor,
+                                title: value,
+                              );
+                            },
+                            textInputAction: TextInputAction.next,
+                            autofocus: true,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.title),
+                              hintText: 'Task Category Title',
                             ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'A title is required';
+                              }
+                              return null;
+                            },
                           ),
-                          child: Text(
-                            _taskCategoryData.id!.isEmpty
-                                ? 'Submit New Task Category'
-                                : 'Submit Edited Information',
+                          const SizedBox(height: 15),
+                          IconPicker(
+                            initialValue: createState
+                                ? 'favorite'
+                                : '${taskCategoryData.icon}',
+                            icon: Icon(
+                              createState ? Icons.apps : taskCategoryData.icon,
+                            ),
+                            title: "Select an icon",
+                            cancelBtn: "Cancel",
+                            enableSearch: true,
+                            searchHint: 'Search icon',
+                            iconCollection: myIconCollection,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'An icon is required';
+                              }
+                              return null;
+                            },
+                            onSaved: (val) {
+                              IconData? icon;
+                              if (createState) {
+                                var iconDataJson = jsonDecode(val.toString());
+                                icon = IconData(
+                                  iconDataJson['codePoint'],
+                                  fontFamily: iconDataJson['fontFamily'],
+                                );
+                              } else {
+                                if (val.toString().contains('IconData')) {
+                                  icon = taskCategoryData.icon;
+                                } else {
+                                  var iconDataJson = jsonDecode(val.toString());
+                                  icon = IconData(
+                                    iconDataJson['codePoint'],
+                                    fontFamily: iconDataJson['fontFamily'],
+                                  );
+                                }
+                              }
+                              taskCategoryData = TaskCategory(
+                                id: taskCategoryData.id,
+                                icon: icon,
+                                iconColor: taskCategoryData.iconColor,
+                                bgColor: taskCategoryData.bgColor,
+                                btnColor: taskCategoryData.btnColor,
+                                title: taskCategoryData.title,
+                              );
+                            },
                           ),
-                        )
-                      ],
+                          const SizedBox(height: 15),
+                          ColorPickerFormField(
+                            initialValue: [],
+                            defaultColor: createState
+                                ? Colors.red
+                                : taskCategoryData.iconColor!,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            maxColors: 10,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.color_lens),
+                              hintText: 'Color Picker',
+                            ),
+                            validator: createState
+                                ? (List<Color>? value) {
+                                    if (value!.isEmpty) {
+                                      return 'a color is required';
+                                    }
+                                    return null;
+                                  }
+                                : null,
+                            onSaved: (value) {
+                              if (!createState) {
+                                value!.isEmpty
+                                    ? value = [taskCategoryData.iconColor!]
+                                    : value;
+                              }
+                              taskCategoryData = TaskCategory(
+                                id: taskCategoryData.id,
+                                icon: taskCategoryData.icon,
+                                iconColor: value!.last,
+                                bgColor: value.last.withOpacity(0.6),
+                                btnColor: value.last.withOpacity(0.2),
+                                title: taskCategoryData.title,
+                              );
+                            },
+                          ),
+                          Row(
+                            children: [
+                              if (taskCategoryData.id!.isNotEmpty) ...[
+                                const SizedBox(width: 10),
+                                const Text(
+                                  'Prior Selected Color',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: taskCategoryData.iconColor,
+                                  ),
+                                ),
+                              ]
+                            ],
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _saveData(),
+                            style: ElevatedButton.styleFrom(
+                              primary: kBlueDarker,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Text(
+                              createState
+                                  ? 'Submit New Task Category'
+                                  : 'Submit Edited Information',
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
