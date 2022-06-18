@@ -217,7 +217,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                             initialValue:
                                 createState ? '' : _taskData.description,
                             textCapitalization: TextCapitalization.sentences,
-                            maxLines: 5,
+                            maxLines: 3,
                             minLines: 3,
                             onSaved: (value) {
                               _taskData = Task(

@@ -37,11 +37,12 @@ dependencies:
   provider: ^6.0.3
   flutter_vector_icons: ^1.0.0
   dotted_border: ^2.0.0+2
-  timelines: ^0.1.0
   icon_picker: ^2.1.0
   color_picker_field: ^1.1.1
   intl: ^0.17.0
   textfield_datepicker: ^0.1.0
+  calendar_view: ^0.0.5
+  timeline_tile: ^2.0.0
 
 
 dev_dependencies:

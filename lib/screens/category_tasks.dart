@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-// import 'package:timelines/timelines.dart';
+// import 'package:timeline_tile/timeline_tile.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:task_management/providers/task.dart';
+import 'package:task_management/widgets/tasktimeline.dart';
+import '../constants/colors.dart';
 import '../providers/task_category.dart';
+import '../widgets/row_timeline.dart';
+import '../widgets/top_date_selection.dart';
 
 class CategoryTasks extends StatefulWidget {
   static const routeName = '/category-tasks';
@@ -19,14 +24,18 @@ class _CategoryTasksState extends State<CategoryTasks> {
     var data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     var id = data['id'] as String;
-
-    var taskCategory = Provider.of<TaskCategoryData>(context).findById(id);
+    var taskCategory =
+        Provider.of<TaskCategoryData>(context, listen: false).findById(id);
+    var tasks =
+        Provider.of<TaskData>(context, listen: false).taskUnderACategory(id);
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
     );
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -47,7 +56,7 @@ class _CategoryTasksState extends State<CategoryTasks> {
           },
         ),
         title: Text(
-          '${taskCategory.title} tasks',
+          '${taskCategory.title} Tasks',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -94,11 +103,55 @@ class _CategoryTasksState extends State<CategoryTasks> {
                   ),
                   color: Colors.white,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: Column(
-                    children: [],
-                  ),
+                child: Column(
+                  children: [
+                    const DateSelector(),
+                    const SizedBox(height: 10),
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(13.0),
+                        child: Column(
+                          children: [
+                            RowTimeline(),
+                            const SizedBox(height: 10),
+                            tasks.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: Image.asset(
+                                            'assets/images/ss.PNG',
+                                            // width: 120,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'No Tasks Available',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: kGreyOpaque,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(
+                                    // color: Colors.red,
+                                    height: size.height / 1.7,
+                                    child: ListView.builder(
+                                      itemCount: tasks.length,
+                                      itemBuilder: (context, index) =>
+                                          TaskTimeLine(task: tasks[index],categoryColor:taskCategory.iconColor),
+                                    ),
+                                  )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

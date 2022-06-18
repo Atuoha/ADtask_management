@@ -17,6 +17,10 @@ class TaskData extends ChangeNotifier {
     return task.accomplishedStatus;
   }
 
+  List taskUnderACategory(String categoryId) {
+    return _tasks.where((task) => task.taskCategoryId == categoryId).toList();
+  }
+
   void updateTask(Task updatedTask) {
     var taskId = _tasks.indexWhere(
       (task) => task.id == updatedTask.id,

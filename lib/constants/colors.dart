@@ -15,3 +15,4 @@ const Color kBlueDarker = Color.fromARGB(255, 99, 139, 218);
 
 const Color kGrey = Color.fromARGB(255, 224, 218, 218);
 const Color kBackground = Color.fromARGB(255, 241, 240, 240);
+const Color kGreyOpaque = Color.fromARGB(255, 239, 237, 237);
