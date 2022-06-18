@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:task_management/providers/task_category.dart';
+import 'package:task_management/screens/add_new_task.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../model/task.dart';
+import '../providers/task.dart';
 
 class TaskTimeLine extends StatefulWidget {
   final Task task;
@@ -18,10 +22,9 @@ class TaskTimeLine extends StatefulWidget {
 class _TaskTimeLineState extends State<TaskTimeLine> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
-        Container(
+        SizedBox(
           height: 95,
           width: 20,
           child: TimelineTile(
@@ -95,7 +98,7 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                               Text(
                                 DateFormat('dd-M-yyyy')
                                     .format(widget.task.date),
-                                    style: const TextStyle(fontSize:10),
+                                style: const TextStyle(fontSize: 10),
                               ),
                             ],
                           ),
@@ -114,15 +117,60 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                             children: [
                               Checkbox(
                                 value: widget.task.accomplishedStatus,
-                                onChanged: (value) => {},
+                                onChanged: (value) => {
+                                  // making the accomplishmentstatus true or false
+                                  Provider.of<TaskData>(
+                                    context,
+                                    listen: false,
+                                  ).toggleAccomplishmentStatus(
+                                    widget.task.id,
+                                  ),
+
+                                  // work on taskcategory making it increment or decrement left or done
+                                  Provider.of<TaskCategoryData>(context,listen: false)
+                                      .toggleTaskAccomplishment(
+                                    widget.task.taskCategoryId,
+                                    value,
+                                  )
+                                },
                               ),
-                              const Icon(
-                                Icons.edit,
-                                size: 18,
+                              GestureDetector(
+                                onTap: () => Navigator.of(context).pushNamed(
+                                  AddNewTask.routeName,
+                                  arguments: {
+                                    'id': widget.task.id,
+                                  },
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 18,
+                                ),
                               ),
-                              const Icon(
-                                Icons.delete_forever,
-                                size: 18,
+                              GestureDetector(
+                                onTap: () {
+                                  // remove task from category
+                                  Provider.of<TaskCategoryData>(
+                                    context,
+                                    listen: false,
+                                  ).removeTask(
+                                    widget.task.taskCategoryId,
+                                    widget.task.accomplishedStatus,
+                                  );
+
+
+                                  // delete task
+                                  Provider.of<TaskData>(
+                                    context,
+                                    listen: false,
+                                  ).deleteTask(
+                                    widget.task.id,
+                                  );
+
+                                },
+                                child: const Icon(
+                                  Icons.delete_forever,
+                                  size: 18,
+                                ),
                               )
                             ],
                           )
@@ -136,6 +184,6 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
           ),
         ),
       ],
-    ));
+    );
   }
 }

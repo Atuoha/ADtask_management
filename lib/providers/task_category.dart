@@ -21,11 +21,41 @@ class TaskCategoryData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeTask(String taskId, String taskCategoryId) {
+  void removeTask(String taskCategoryId, bool taskStatus) {
     var taskCategory = _taskCategories.firstWhere(
       (category) => category.id == taskCategoryId,
     );
-    taskCategory.tasks.remove(taskId);
+    switch (taskStatus) {
+      case false:
+        taskCategory.left = taskCategory.left - 1;
+        break;
+      case true:
+        taskCategory.done = taskCategory.done - 1;
+        break;
+
+      default:
+    }
+    notifyListeners();
+  }
+
+
+  void toggleTaskAccomplishment(String taskCategoryId, bool? status){
+     var taskCategory = _taskCategories.firstWhere(
+      (category) => category.id == taskCategoryId,
+    );
+    switch (status) {
+      case false:
+        taskCategory.left = taskCategory.left + 1;
+        taskCategory.done = taskCategory.done - 1;
+        break;
+      case true:
+        taskCategory.done = taskCategory.done + 1;
+        taskCategory.left = taskCategory.left - 1;
+
+        break;
+
+      default:
+    }
     notifyListeners();
   }
 

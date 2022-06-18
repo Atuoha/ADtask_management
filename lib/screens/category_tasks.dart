@@ -26,6 +26,7 @@ class _CategoryTasksState extends State<CategoryTasks> {
     var id = data['id'] as String;
     var taskCategory =
         Provider.of<TaskCategoryData>(context, listen: false).findById(id);
+        
     var tasks =
         Provider.of<TaskData>(context, listen: false).taskUnderACategory(id);
 
@@ -141,12 +142,18 @@ class _CategoryTasksState extends State<CategoryTasks> {
                                 : SizedBox(
                                     // color: Colors.red,
                                     height: size.height / 1.7,
-                                    child: ListView.builder(
+                                    child: 
+                                    Consumer<TaskData>(builder: (context, value, child) => 
+                                    ListView.builder(
                                       itemCount: tasks.length,
                                       itemBuilder: (context, index) =>
-                                          TaskTimeLine(task: tasks[index],categoryColor:taskCategory.iconColor),
+                                          TaskTimeLine(
+                                        task: tasks[index],
+                                        categoryColor: taskCategory.iconColor,
+                                      ),
                                     ),
                                   )
+                                )
                           ],
                         ),
                       ),

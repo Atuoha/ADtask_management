@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Task {
+class Task with ChangeNotifier{
   final String id;
   final String taskCategoryId;
   final String title;
@@ -9,7 +9,7 @@ class Task {
   final String endTime;
   final DateTime date;
   final Color bgColor;
-  final bool accomplishedStatus;
+  bool accomplishedStatus;
   Task({
     required this.id,
     required this.taskCategoryId,
@@ -21,4 +21,9 @@ class Task {
     required this.bgColor,
     this.accomplishedStatus = false,
   });
+
+  void toggleAccomplishment() {
+    accomplishedStatus = !accomplishedStatus;
+    notifyListeners();
+  }
 }

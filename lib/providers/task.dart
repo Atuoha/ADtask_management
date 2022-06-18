@@ -6,19 +6,23 @@ class TaskData extends ChangeNotifier {
     var task = _tasks.firstWhere(
       (task) => task.id == id,
     );
-    task.accomplishmentStatus = !task.accomplishmentStatus;
+    task.toggleAccomplishment();
     notifyListeners();
   }
 
-  bool checkAccomplishmentStatus(String id) {
-    var task = _tasks.firstWhere(
-      (task) => task.id == id,
-    );
-    return task.accomplishedStatus;
-  }
+  // bool checkAccomplishmentStatus(String id) {
+  //   var task = _tasks.firstWhere(
+  //     (task) => task.id == id,
+  //   );
+  //   return task.accomplishedStatus;
+  // }
 
   List taskUnderACategory(String categoryId) {
-    return _tasks.where((task) => task.taskCategoryId == categoryId).toList();
+    return _tasks
+        .where(
+          (task) => task.taskCategoryId == categoryId,
+        )
+        .toList();
   }
 
   void updateTask(Task updatedTask) {
