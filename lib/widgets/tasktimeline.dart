@@ -96,9 +96,12 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                DateFormat('dd-M-yyyy')
-                                    .format(widget.task.date),
-                                style: const TextStyle(fontSize: 10),
+                                DateFormat('dd-M-yyyy').format(
+                                  widget.task.date,
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                ),
                               ),
                             ],
                           ),
@@ -116,6 +119,9 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Checkbox(
+                                splashRadius: 150,
+                                checkColor: Colors.white,
+                                activeColor: Colors.black,
                                 value: widget.task.accomplishedStatus,
                                 onChanged: (value) => {
                                   // making the accomplishmentstatus true or false
@@ -127,7 +133,8 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                                   ),
 
                                   // work on taskcategory making it increment or decrement left or done
-                                  Provider.of<TaskCategoryData>(context,listen: false)
+                                  Provider.of<TaskCategoryData>(context,
+                                          listen: false)
                                       .toggleTaskAccomplishment(
                                     widget.task.taskCategoryId,
                                     value,
@@ -157,7 +164,6 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                                     widget.task.accomplishedStatus,
                                   );
 
-
                                   // delete task
                                   Provider.of<TaskData>(
                                     context,
@@ -165,7 +171,6 @@ class _TaskTimeLineState extends State<TaskTimeLine> {
                                   ).deleteTask(
                                     widget.task.id,
                                   );
-
                                 },
                                 child: const Icon(
                                   Icons.delete_forever,

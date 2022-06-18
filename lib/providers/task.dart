@@ -29,7 +29,7 @@ class TaskData extends ChangeNotifier {
     var taskId = _tasks.indexWhere(
       (task) => task.id == updatedTask.id,
     );
-    if (taskId > 0) {
+    if (taskId >= 0) {
       _tasks[taskId] = updatedTask;
     }
     notifyListeners();

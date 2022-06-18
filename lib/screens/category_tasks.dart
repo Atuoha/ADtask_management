@@ -26,9 +26,9 @@ class _CategoryTasksState extends State<CategoryTasks> {
     var id = data['id'] as String;
     var taskCategory =
         Provider.of<TaskCategoryData>(context, listen: false).findById(id);
-        
-    var tasks =
-        Provider.of<TaskData>(context, listen: false).taskUnderACategory(id);
+
+    // var tasks =
+    //     Provider.of<TaskData>(context, listen: false).taskUnderACategory(id);
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -115,45 +115,56 @@ class _CategoryTasksState extends State<CategoryTasks> {
                           children: [
                             RowTimeline(),
                             const SizedBox(height: 10),
-                            tasks.isEmpty
-                                ? Center(
-                                    child: Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.asset(
-                                            'assets/images/ss.PNG',
-                                            // width: 120,
+                            SizedBox(
+                              // color: Colors.red,
+                              height: size.height / 1.7,
+                              child: Consumer<TaskData>(
+                                builder: (
+                                  context,
+                                  value,
+                                  child,
+                                ) =>
+                                    value.taskUnderACategory(id).isEmpty
+                                        ? Center(
+                                            child: Column(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: Image.asset(
+                                                    'assets/images/ss.PNG',
+                                                    // width: 120,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                const Text(
+                                                  'No Tasks Available',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: kGreyOpaque,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            itemCount: value
+                                                .taskUnderACategory(id)
+                                                .length,
+                                            itemBuilder: (
+                                              context,
+                                              index,
+                                            ) =>
+                                                TaskTimeLine(
+                                              task: value.taskUnderACategory(
+                                                  id)[index],
+                                              categoryColor:
+                                                  taskCategory.iconColor,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        const Text(
-                                          'No Tasks Available',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: kGreyOpaque,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(
-                                    // color: Colors.red,
-                                    height: size.height / 1.7,
-                                    child: 
-                                    Consumer<TaskData>(builder: (context, value, child) => 
-                                    ListView.builder(
-                                      itemCount: tasks.length,
-                                      itemBuilder: (context, index) =>
-                                          TaskTimeLine(
-                                        task: tasks[index],
-                                        categoryColor: taskCategory.iconColor,
-                                      ),
-                                    ),
-                                  )
-                                )
+                              ),
+                            )
                           ],
                         ),
                       ),

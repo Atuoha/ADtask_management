@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:task_management/providers/task_category.dart';
 import '../constants/colors.dart';
 import '../model/task.dart';
-import '../model/task_category.dart';
 import '../providers/task.dart';
 import 'package:intl/intl.dart';
 import 'package:textfield_datepicker/textfield_timePicker.dart';
@@ -52,7 +51,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       // ignore: unnecessary_null_comparison
       if (taskId != null) {
-        _taskData = Provider.of(
+        _taskData = Provider.of<TaskData>(
           context,
           listen: false,
         ).findById(taskId['id']);
@@ -129,7 +128,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           },
         ),
         title: Text(
-          createState ? 'Add New Task ' : '${_taskData.title} Category',
+          createState ? 'Add New Task ' : '${_taskData.title} Task',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -154,7 +153,7 @@ class _AddNewTaskState extends State<AddNewTask> {
             child: Text(
               createState
                   ? 'Add New Task '
-                  : 'Editing ${_taskData.title} Task Category',
+                  : 'Editing ${_taskData.title} Task',
               style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(116, 255, 255, 255),
@@ -426,12 +425,14 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 date: date,
                               );
                             },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Date is required';
-                              }
-                              return null;
-                            },
+                            validator:  createState
+                                ? (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Date is required';
+                                    }
+                                    return null;
+                                  }
+                                : null,
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
