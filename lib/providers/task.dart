@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../model/task.dart';
 
@@ -6,6 +8,9 @@ class TaskData extends ChangeNotifier {
     var task = _tasks.firstWhere(
       (task) => task.id == id,
     );
+    _tasks.forEach((task) {
+      print('Title:${task.title}  ID: ${task.id}');
+    });
     task.toggleAccomplishment();
     notifyListeners();
   }
@@ -42,8 +47,9 @@ class TaskData extends ChangeNotifier {
   }
 
   void addTask(Task task) {
+     var idRand = Random().nextInt(1000) + 003;
     var newTask = Task(
-      id: DateTime.now.toString(),
+      id: idRand.toString(),
       title: task.title,
       description: task.description,
       bgColor: task.bgColor,

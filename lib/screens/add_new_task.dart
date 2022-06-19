@@ -25,8 +25,10 @@ class _AddNewTaskState extends State<AddNewTask> {
   final _controller2 = TextEditingController();
   final _controller3 = TextEditingController();
 
+  
+
   var _taskData = Task(
-    id: DateTime.now().toString(),
+    id: '',
     title: '',
     description: '',
     bgColor: Colors.red,
@@ -35,6 +37,8 @@ class _AddNewTaskState extends State<AddNewTask> {
     date: DateTime.now(),
     taskCategoryId: '',
   );
+
+
 
   var isInit = true;
   var createState = true;
@@ -151,9 +155,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
-              createState
-                  ? 'Add New Task '
-                  : 'Editing ${_taskData.title} Task',
+              createState ? 'Add New Task ' : 'Editing ${_taskData.title} Task',
               style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(116, 255, 255, 255),
@@ -425,7 +427,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 date: date,
                               );
                             },
-                            validator:  createState
+                            validator: createState
                                 ? (value) {
                                     if (value!.isEmpty) {
                                       return 'Date is required';

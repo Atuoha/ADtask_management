@@ -11,9 +11,11 @@ class TaskTimeLine extends StatefulWidget {
   final Task task;
   final Color? categoryColor;
 
-  const TaskTimeLine(
-      {Key? key, required this.task, required this.categoryColor})
-      : super(key: key);
+  const TaskTimeLine({
+    Key? key,
+    required this.task,
+    required this.categoryColor,
+  }) : super(key: key);
 
   @override
   State<TaskTimeLine> createState() => _TaskTimeLineState();
